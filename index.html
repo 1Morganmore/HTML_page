@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviolo 주문자 정보 (종합)</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -44,7 +42,7 @@
 
         /* 로고 스타일 */
         .logo {
-            height: 60px; /* 로고 높이 설정 */
+            height: 60px;
             width: auto;
             margin-bottom: 20px;
             background-color: white; 
@@ -65,36 +63,6 @@
             font-size: 14px;
         }
 
-        .pdf-btn {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Pretendard', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .pdf-btn:hover {
-            background-color: white;
-            color: #2c3e50;
-        }
-
-        .pdf-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
         .table-wrapper {
             padding: 20px;
             overflow-x: auto;
@@ -104,14 +72,14 @@
             width: 100%;
             border-collapse: collapse;
             min-width: 800px;
-            table-layout: fixed; /* 컬럼 너비 고정을 위해 추가 */
+            table-layout: fixed;
         }
 
         th, td {
-            padding: 16px 10px; /* 좌우 패딩을 조금 줄임 */
+            padding: 16px 10px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
-            word-break: break-all; /* 긴 텍스트 줄바꿈 */
+            word-break: break-all;
         }
 
         th {
@@ -137,16 +105,10 @@
 
         /* --- 컬럼 너비 조정 --- */
         .col-id { width: 40px; text-align: center; color: #888; }
-        
-        /* 주문일자: 너비 축소 (80px -> 65px) */
         .col-date { width: 65px; text-align: center; color: #555; font-size: 0.9em; background-color: #fafafa; border-radius: 4px; }
-        
-        /* 성함: 너비 고정하여 축소 (자동 -> 90px) */
         .col-name { width: 90px; font-weight: 600; color: #2c3e50; }
-        
-        /* 연락처: 너비 확대 및 줄바꿈 방지 추가 (자동 -> 130px) */
         .col-contact { width: 130px; white-space: nowrap; }
-
+        
         .col-tracking { font-family: monospace; letter-spacing: 0.5px; }
         .col-status { color: #27ae60; font-weight: 600; }
 
@@ -192,8 +154,8 @@
             border-top: 1px solid #e0e0e0;
         }
 
+        /* 기본 브라우저 인쇄 기능(Ctrl+P)을 위한 스타일 */
         @media print {
-            .pdf-btn { display: none; }
             body { padding: 0; background-color: white; }
             .container { box-shadow: none; }
         }
@@ -201,7 +163,7 @@
 </head>
 <body>
 
-    <div class="container" id="capture-area">
+    <div class="container">
         <div class="header">
             <img src="영문 가로배치 png.png" 
                  alt="Scavengers Logo" 
@@ -210,10 +172,6 @@
                  
             <h1>Enviolo 주문자 정보 취합</h1>
             <p>총 7명 (당사 발주 기준 11월 25~26일 외 포함)</p>
-            <button class="pdf-btn" onclick="downloadPDF()">
-                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                PDF 저장
-            </button>
         </div>
 
         <div class="table-wrapper">
@@ -223,7 +181,8 @@
                         <th class="col-id">순번</th>
                         <th class="col-date">주문일자<br><span style="font-size:0.8em; font-weight:normal;">(주문서)</span></th>
                         <th class="col-name">성함</th>
-                        <th class="col-contact">연락처</th> <th>개인통관고유부호</th>
+                        <th class="col-contact">연락처</th>
+                        <th>개인통관고유부호</th>
                         <th>송장번호 (UPS)</th>
                         <th>현위치</th>
                     </tr>
@@ -233,7 +192,8 @@
                         <td class="col-id">1</td>
                         <td class="col-date">11/21</td>
                         <td class="col-name">임성근</td>
-                        <td class="col-contact">010-2314-1775</td> <td>P160019890940</td>
+                        <td class="col-contact">010-2314-1775</td>
+                        <td>P160019890940</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474187804" target="_blank" class="tracking-link">1ZE1900V0474187804</a>
@@ -247,7 +207,8 @@
                         <td class="col-id">2</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">서현진</td>
-                        <td class="col-contact">010-3872-4856</td> <td>P771160052246</td>
+                        <td class="col-contact">010-3872-4856</td>
+                        <td>P771160052246</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473098813" target="_blank" class="tracking-link">1ZE1900V0473098813</a>
@@ -261,7 +222,8 @@
                         <td class="col-id">3</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">오일환</td>
-                        <td class="col-contact">010-5489-5268</td> <td>P871160038069</td>
+                        <td class="col-contact">010-5489-5268</td>
+                        <td>P871160038069</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474543026" target="_blank" class="tracking-link">1ZE1900V0474543026</a>
@@ -275,7 +237,8 @@
                         <td class="col-id">4</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">김준호</td>
-                        <td class="col-contact">010-2311-6318</td> <td>P170000817650</td>
+                        <td class="col-contact">010-2311-6318</td>
+                        <td>P170000817650</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0475013972" target="_blank" class="tracking-link">1ZE1900V0475013972</a>
@@ -289,7 +252,8 @@
                         <td class="col-id">5</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">최인태</td>
-                        <td class="col-contact">010-9330-2511</td> <td>P190008183457</td>
+                        <td class="col-contact">010-9330-2511</td>
+                        <td>P190008183457</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474595766" target="_blank" class="tracking-link">1ZE1900V0474595766</a>
@@ -303,7 +267,8 @@
                         <td class="col-id">6</td>
                         <td class="col-date">11/25</td>
                         <td class="col-name">김형준</td>
-                        <td class="col-contact">010-7103-0802</td> <td>P170011730072</td>
+                        <td class="col-contact">010-7103-0802</td>
+                        <td>P170011730072</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473314856" target="_blank" class="tracking-link">1ZE1900V0473314856</a>
@@ -320,7 +285,8 @@
                             OH WON CHAN<br>
                             <span style="font-size: 0.85em; color: #888; font-weight: normal;">(오원찬)</span>
                         </td>
-                        <td class="col-contact">010-2992-2450</td> <td>P210012447538</td>
+                        <td class="col-contact">010-2992-2450</td>
+                        <td>P210012447538</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473007045" target="_blank" class="tracking-link">1ZE1900V0473007045</a>
@@ -339,46 +305,6 @@
             ※ 주문일자는 해당 고객의 주문서(PDF) 상단 날짜를 기준으로 기재하였습니다.
         </div>
     </div>
-
-    <script>
-        window.jsPDF = window.jspdf.jsPDF;
-
-        function downloadPDF() {
-            const element = document.getElementById('capture-area');
-            const btn = document.querySelector('.pdf-btn');
-            
-            // 캡쳐 시 버튼 숨김 처리
-            btn.style.display = 'none';
-
-            // PDF 생성 전 잠시 대기 (렌더링 안정화)
-            setTimeout(() => {
-                html2canvas(element, {
-                    scale: 2, // 고해상도 캡쳐
-                    useCORS: true, // 크로스 도메인 이미지 허용
-                    allowTaint: true,
-                    backgroundColor: "#ffffff",
-                    padding: 40 // PDF 생성 시 상하좌우 여백 추가
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    // A4 Portrait 방향으로 생성
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    
-                    // 이미지를 A4 너비에 맞춰 배치
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save('Enviolo_주문자정보_취합.pdf');
-
-                    // 캡쳐 후 버튼 다시 보이기
-                    btn.style.display = 'flex';
-                }).catch(err => {
-                    console.error("PDF 생성 실패:", err);
-                    alert("PDF 생성 중 오류가 발생했습니다. 개발자 도구 콘솔을 확인해주세요.");
-                    btn.style.display = 'flex';
-                });
-            }, 100);
-        }
-    </script>
 
 </body>
 </html>
