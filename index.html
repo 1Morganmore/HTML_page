@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviolo 주문자 정보 (종합)</title>
-    <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
@@ -48,7 +47,6 @@
             height: 60px; /* 로고 높이 설정 */
             width: auto;
             margin-bottom: 20px;
-            /* 투명 배경 로고가 어두운 헤더 위에서 잘 보이도록 배경 추가 (선택 사항) */
             background-color: white; 
             padding: 8px 12px;
             border-radius: 8px;
@@ -106,12 +104,14 @@
             width: 100%;
             border-collapse: collapse;
             min-width: 800px;
+            table-layout: fixed; /* 컬럼 너비 고정을 위해 추가 */
         }
 
         th, td {
-            padding: 16px;
+            padding: 16px 10px; /* 좌우 패딩을 조금 줄임 */
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
+            word-break: break-all; /* 긴 텍스트 줄바꿈 */
         }
 
         th {
@@ -135,9 +135,18 @@
             background-color: #fcfcfc;
         }
 
-        .col-id { width: 50px; text-align: center; color: #888; }
-        .col-date { width: 80px; text-align: center; color: #555; font-size: 0.9em; background-color: #fafafa; border-radius: 4px; }
-        .col-name { font-weight: 600; color: #2c3e50; }
+        /* --- 컬럼 너비 조정 --- */
+        .col-id { width: 40px; text-align: center; color: #888; }
+        
+        /* 주문일자: 너비 축소 (80px -> 65px) */
+        .col-date { width: 65px; text-align: center; color: #555; font-size: 0.9em; background-color: #fafafa; border-radius: 4px; }
+        
+        /* 성함: 너비 고정하여 축소 (자동 -> 90px) */
+        .col-name { width: 90px; font-weight: 600; color: #2c3e50; }
+        
+        /* 연락처: 너비 확대 및 줄바꿈 방지 추가 (자동 -> 130px) */
+        .col-contact { width: 130px; white-space: nowrap; }
+
         .col-tracking { font-family: monospace; letter-spacing: 0.5px; }
         .col-status { color: #27ae60; font-weight: 600; }
 
@@ -194,11 +203,6 @@
 
     <div class="container" id="capture-area">
         <div class="header">
-            <!-- 
-                [로고 이미지 설정]
-                src="영문 가로배치 png.png" : 다운로드 후 같은 폴더에 해당 이미지 파일이 있으면 표시됩니다.
-                onerror="..." : 이미지를 찾지 못할 경우(미리보기 등) 임시 로고를 보여줍니다.
-            -->
             <img src="영문 가로배치 png.png" 
                  alt="Scavengers Logo" 
                  class="logo" 
@@ -206,6 +210,10 @@
                  
             <h1>Enviolo 주문자 정보 취합</h1>
             <p>총 7명 (당사 발주 기준 11월 25~26일 외 포함)</p>
+            <button class="pdf-btn" onclick="downloadPDF()">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                PDF 저장
+            </button>
         </div>
 
         <div class="table-wrapper">
@@ -214,21 +222,18 @@
                     <tr>
                         <th class="col-id">순번</th>
                         <th class="col-date">주문일자<br><span style="font-size:0.8em; font-weight:normal;">(주문서)</span></th>
-                        <th>성함</th>
-                        <th>연락처</th>
-                        <th>개인통관고유부호</th>
+                        <th class="col-name">성함</th>
+                        <th class="col-contact">연락처</th> <th>개인통관고유부호</th>
                         <th>송장번호 (UPS)</th>
                         <th>현위치</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 11월 21일 주문 -->
                     <tr>
                         <td class="col-id">1</td>
                         <td class="col-date">11/21</td>
                         <td class="col-name">임성근</td>
-                        <td>010-2314-1775</td>
-                        <td>P160019890940</td>
+                        <td class="col-contact">010-2314-1775</td> <td>P160019890940</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474187804" target="_blank" class="tracking-link">1ZE1900V0474187804</a>
@@ -238,13 +243,11 @@
                             <span class="status-detail">네덜란드 Apeldoorn<br>11/26 16:36</span>
                         </td>
                     </tr>
-                    <!-- 11월 22일 주문 -->
                     <tr>
                         <td class="col-id">2</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">서현진</td>
-                        <td>010-3872-4856</td>
-                        <td>P771160052246</td>
+                        <td class="col-contact">010-3872-4856</td> <td>P771160052246</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473098813" target="_blank" class="tracking-link">1ZE1900V0473098813</a>
@@ -258,8 +261,7 @@
                         <td class="col-id">3</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">오일환</td>
-                        <td>010-5489-5268</td>
-                        <td>P871160038069</td>
+                        <td class="col-contact">010-5489-5268</td> <td>P871160038069</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474543026" target="_blank" class="tracking-link">1ZE1900V0474543026</a>
@@ -273,8 +275,7 @@
                         <td class="col-id">4</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">김준호</td>
-                        <td>010-2311-6318</td>
-                        <td>P170000817650</td>
+                        <td class="col-contact">010-2311-6318</td> <td>P170000817650</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0475013972" target="_blank" class="tracking-link">1ZE1900V0475013972</a>
@@ -288,8 +289,7 @@
                         <td class="col-id">5</td>
                         <td class="col-date">11/22</td>
                         <td class="col-name">최인태</td>
-                        <td>010-9330-2511</td>
-                        <td>P190008183457</td>
+                        <td class="col-contact">010-9330-2511</td> <td>P190008183457</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0474595766" target="_blank" class="tracking-link">1ZE1900V0474595766</a>
@@ -299,13 +299,11 @@
                             <span class="status-detail">네덜란드 Apeldoorn<br>11/26 16:36</span>
                         </td>
                     </tr>
-                    <!-- 11월 25일 주문 -->
                     <tr>
                         <td class="col-id">6</td>
                         <td class="col-date">11/25</td>
                         <td class="col-name">김형준</td>
-                        <td>010-7103-0802</td>
-                        <td>P170011730072</td>
+                        <td class="col-contact">010-7103-0802</td> <td>P170011730072</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473314856" target="_blank" class="tracking-link">1ZE1900V0473314856</a>
@@ -315,7 +313,6 @@
                             <span class="status-detail">네덜란드 Apeldoorn<br>11/26 16:36</span>
                         </td>
                     </tr>
-                    <!-- 11월 26일 주문 -->
                     <tr>
                         <td class="col-id">7</td>
                         <td class="col-date">11/26</td>
@@ -323,8 +320,7 @@
                             OH WON CHAN<br>
                             <span style="font-size: 0.85em; color: #888; font-weight: normal;">(오원찬)</span>
                         </td>
-                        <td>010-2992-2450</td>
-                        <td>P210012447538</td>
+                        <td class="col-contact">010-2992-2450</td> <td>P210012447538</td>
                         <td class="col-tracking">
                             <span class="badge badge-ups">UPS</span>
                             <a href="https://www.ups.com/track?tracknum=1ZE1900V0473007045" target="_blank" class="tracking-link">1ZE1900V0473007045</a>
